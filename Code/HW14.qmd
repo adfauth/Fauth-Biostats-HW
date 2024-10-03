@@ -1,0 +1,18 @@
+---
+title: "HW14"
+author: "Aidan Fauth"
+format: html
+editor: visual
+---
+## Set up
+```{r}
+rm(list=ls())
+library(tidyverse)
+library(here)
+```
+
+
+
+
+
+
