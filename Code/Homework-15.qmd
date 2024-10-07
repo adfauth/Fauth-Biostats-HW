@@ -1,0 +1,177 @@
+---
+title: "Homework 15"
+author: "Aidan Fauth"
+format: html
+editor: visual
+---
+
+## Introduction
+
+This file is the material from chapter 3 of *Getting Started with R*. I will be using data from the book that deals with apple production. I will be learning about various data manipulation methods in this chapter primarily using the dplyr and ggplot packages.
+
+## Set up
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library(here)
+```
+
+Import the data set:
+
+```{r}
+compensation = read.csv(here("Data", "compensation.csv"))
+glimpse(compensation) # take a look at the data
+```
+
+Get summary statistics for each of the compensation variables using the `summay()` function
+
+```{r}
+summary(compensation)
+```
+
+The book had Grazing as a factored variable, but mine is only character.
+
+```{r}
+compensation$Grazing = as.factor(compensation$Grazing)
+levels(compensation$Grazing) #check them out
+```
+
+Now the summary output should be the same as the book's:
+
+```{r}
+summary(compensation)
+```
+
+## Using dplyr 'Verbs'
+
+-   Important note: dpylr functions are supplied a data frame and then return a data frame.
+
+The first argument to all dplyr functions is the data frame (in this case the compensation data.)
+
+`select()` -- grabs cols. To see names of columns use `names(compensation)`.
+
+```{r}
+select(compensation, Fruit)
+```
+
+Selecting all columns except one:
+
+```{r}
+select(compensation, -Root) # add a minus sign
+```
+
+`slice()` -- grabs rows including one, a sequence, or a discontinuous set.
+
+```{r}
+slice(compensation,2) # one row
+slice(compensation,2:10) # set of rows
+slice(compensation,c(2,3,10)) # discontinuous set
+```
+
+`filter()` -- powerful subsetting
+
+requires knowledge of logical and relational operators (boolean values.)
+
+Practicing with \> first using the `with()` function which asks R to look at a data frame and perform a action, then stop looking.
+
+```{r}
+with(compensation, Fruit > 80) # check to see if the fruit value is greater than 80
+```
+
+Boolean values are what is passed to `filter()` and then it acts on them.
+
+```{r}
+# find the rows where Fruit > 80 and return it as a data frame
+filter(compensation, Fruit > 80)
+```
+
+Selecting rows on multiple conditions:
+
+```{r}
+filter(compensation, Fruit > 80 | Fruit < 20)
+```
+
+Saving this information in a variable:
+
+```{r}
+lo_hi_fruit = filter(compensation,Fruit > 80 | Fruit < 20)
+lo_hi_fruit # now print it
+```
+
+Commit this to memory: " assign the values returned by subsetting using filter to an object if you want to use them again" (66).
+
+## Transforming
+
+`mutate()` -- designates a new column name in the df with the tranformed data.
+
+Will do this by overwritting the original working df.
+
+```{r}
+head(compensation) # what the df looks like now
+
+# use mutate
+compensation = mutate(compensation,logFruit = log(Fruit))
+
+# what compensation looks like now
+head(compensation)
+```
+
+## Sorting
+
+`arrange()` -- sorts the rows
+
+Increasing order of Fruit:
+
+```{r}
+arrange(compensation,Fruit)
+```
+
+## Mini-summary and two tips
+
+Tip 1: composition of dplyr functions:
+
+```{r}
+select(filter(compensation, Fruit > 80), Root) # Root values from Fruit > 80
+```
+
+Tip 2: pipe -- '%\>%' read as "put the answer of the left-hand command into the function on the right"
+
+Note: piping with dplyr starts with a df
+
+```{r}
+compensation %>% filter(Fruit > 80) %>% select(Root)
+```
+
+Read from left to right: 1) use the compensation data 2) filter based on Fruit \> 80 3) pass it to select and only return the Root column data.
+
+## Summarization
+
+General Outline:
+
+1.  Declare data frame and grouping variable
+
+2.  Math function to summarize the data
+
+3.  Name for the returned values
+
+4.  Make R use all the information
+
+Method 1: Nested -- No Piping
+```{r}
+summarise(group_by(compensation, Grazing),meanFruit = mean(Fruit)) # you can save this as an object by assigning it a variable name (i.e mean_Fruit <-/mean_Fruit = )
+```
+
+Method 2: Pipe -- No Nesting
+```{r}
+compensation %>% group_by(Grazing) %>% summarize(meanFruit = mean(Fruit))
+```
+
+
+## Extending Summarization
+
+including more summary statistics like `mean()`, `sd()`, and `median()`
+```{r}
+compensation %>% group_by(Grazing) %>% summarize(meanFruit = mean(Fruit), sdFruit = sd(Fruit), medFruit = median(Fruit)) # I added the median which was not included in the book example.
+```
+
