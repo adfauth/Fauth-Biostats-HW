@@ -1,0 +1,28 @@
+---
+title: "Homework 16"
+author: "Aidan Fauth"
+format: html
+editor: visual
+---
+
+## Set up
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library(here)
+```
+
+Create a data frame using imported data:
+```{r}
+cover = read.csv(here("Data", "donnerville_percent_cover.csv"))
+```
+
+Use two different functions to examine the data:
+```{r}
+head(cover) # see data structure and first 6 rows
+summary(cover) # see some summary statistics of the data
+```
+
+
+
