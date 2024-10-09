@@ -158,20 +158,21 @@ General Outline:
 4.  Make R use all the information
 
 Method 1: Nested -- No Piping
+
 ```{r}
 summarise(group_by(compensation, Grazing),meanFruit = mean(Fruit)) # you can save this as an object by assigning it a variable name (i.e mean_Fruit <-/mean_Fruit = )
 ```
 
 Method 2: Pipe -- No Nesting
+
 ```{r}
 compensation %>% group_by(Grazing) %>% summarize(meanFruit = mean(Fruit))
 ```
 
-
 ## Extending Summarization
 
 including more summary statistics like `mean()`, `sd()`, and `median()`
+
 ```{r}
 compensation %>% group_by(Grazing) %>% summarize(meanFruit = mean(Fruit), sdFruit = sd(Fruit), medFruit = median(Fruit)) # I added the median which was not included in the book example.
 ```
-
