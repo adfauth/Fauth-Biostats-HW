@@ -14,11 +14,13 @@ library(here)
 ```
 
 Create a data frame using imported data:
+
 ```{r}
 cover = read.csv(here("Data", "donnerville_percent_cover.csv"))
 ```
 
 Use two different functions to examine the data:
+
 ```{r}
 head(cover) # see data structure and first 6 rows
 summary(cover) # see some summary statistics of the data
@@ -27,6 +29,7 @@ summary(cover) # see some summary statistics of the data
 Make Site, Plot type, and cover type into factor variables:
 
 Site:
+
 ```{r}
 cover$Site = as.factor(cover$Site)
 levels(cover$Site)
@@ -35,18 +38,21 @@ levels(cover$Site)
 Need to standardize the names:
 
 Start with Donnerville 1:
+
 ```{r}
 fix1 = which(cover$Site %in% c("DONNERVILLE - 1", "donnerville 1", "Donnerville 1"))
 cover$Site[fix1] = "Donnerville 1"
 ```
 
 Donnerville 2 (use the which == instead because there are only a few errors):
+
 ```{r}
 fix2 = which(cover$Site == "donnerville 2")
 cover$Site[fix2] = "Donnerville 2"
 ```
 
 Donnerville 3 (use the same method as 2):
+
 ```{r}
 fix3 = which(cover$Site == "donnerville-3")
 cover$Site[fix3] = "Donnerville 3"
@@ -57,6 +63,7 @@ levels(cover$Site)
 Fix Plot type:
 
 Change it to a factor variable:
+
 ```{r}
 cover$Plot.type = as.factor(cover$Plot.type)
 levels(cover$Plot.type) # see if there are any errors in data
@@ -65,6 +72,7 @@ levels(cover$Plot.type) # see if there are any errors in data
 Fix cover type:
 
 Change it to a factor variable:
+
 ```{r}
 cover$cover_type = as.factor(cover$cover_type)
 levels(cover$cover_type)
@@ -73,18 +81,21 @@ levels(cover$cover_type)
 Standardize the data entered:
 
 Start with bare:
+
 ```{r}
 fix4 = which(cover$cover_type == "bare")
 cover$cover_type[fix4] = "Bare"
 ```
 
 Bryophytes:
+
 ```{r}
 fix5 = which(cover$cover_type == "bryophtes")
 cover$cover_type[fix5] = "Bryophytes"
 ```
 
 Vascular:
+
 ```{r}
 fix6 = which(cover$cover_type == "vasc ")
 cover$cover_type[fix6] = "Vascular"
@@ -95,11 +106,13 @@ levels(cover$cover_type)
 Make Date into a date variable:
 
 First, we need a package:
+
 ```{r}
 library(lubridate)
 ```
 
 Save Date as a date variable using the `dmy()` in the lubridate package (because that is the order they will be parsed):
+
 ```{r}
 ?lubridate # check make sure I am using the right function
 cover$Date = dmy(cover$Date) # based on how the chr data was formatted originally
@@ -109,6 +122,7 @@ head(cover) # see if the function worked
 Find the average percent cover by cover type for Donnerville 1:
 
 Use the `summarise()` function with piping:
+
 ```{r}
 filter(cover,Site == "Donnerville 1") %>% group_by(cover_type) %>% summarise(meanPCov = mean(Percent)) # filter returns a data frame which can be passed into group_by and summarise
 ```
@@ -116,13 +130,8 @@ filter(cover,Site == "Donnerville 1") %>% group_by(cover_type) %>% summarise(mea
 Find the average vascular plant cover across all sites
 
 Use the `summarise()` function with piping:
+
 ```{r}
 # use filter again to just get the rows with vascular plants:
 filter(cover, cover_type == "Vascular") %>% group_by(Site) %>% summarise(meanPVCov = mean(Percent))
 ```
-
-
-
-
-
-
