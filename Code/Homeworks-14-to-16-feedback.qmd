@@ -1,0 +1,25 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+## Homework 14 - 16 feedback
+
+### Homework 14
+
+Looks good!
+
+### Homework 15
+
+Very nice! You did an excellent job both writing out your thought processes outside of code chunks and commenting your code inside of code chunks. I like that you also calculated the median.
+
+You may wish to consider using `|>` as your piping operator rather than `%>%` as it is more up-to-date.
+
+### Homework 16
+
+Looking good! Note that at line 111 where you run `library(lubridate)` it is unnecessary since lubridate is automatically added when you run `library(tidyverse)` at the top of the script.
+
+### General
+
+I noticed in both HW15 and HW16 that you are using `=` rather than `<-` as your assignment operator. In most instances, doing so is fine, but it can run you into trouble, [Here's a link to a discussion on stack overflow](https://stackoverflow.com/questions/1741820/what-are-the-differences-between-and-assignment-operators) about why to stick with `<-` rather than `=`
