@@ -1,0 +1,179 @@
+---
+title: "HW 18"
+author: "Aidan Fauth"
+format: html
+editor: visual
+---
+## Set up
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library(here)
+```
+
+Load in the compensation data set and make sure all the variables are in the correct 'form' (the correct data type)
+
+```{r}
+compensation <- read.csv(here("Data", "compensation.csv"))
+head(compensation) # take a look at the data types
+```
+
+Factor the Grazing variable:
+
+```{r}
+compensation$Grazing <- as.factor(compensation$Grazing)
+levels(compensation$Grazing) # make sure the levels are correct (it should be good bc the last time there were no errors)
+```
+
+
+## "4.2 ggplot2: a grammar for graphics"
+
+Basic syntax of ggplot2:
+
+aes() defines the aesthetics of the graph -- what the variables are (what the response and predictor are)
+
++ symbol is how extra "layers" are added to the graph like geom_point() adds points
+
+```{r}
+ggplot(compensation,aes(x = Root, y = Fruit)) + 
+  geom_point() # 1st line is the data frame and aesthetics, 2nd line is for the geometric layer -- the norm is to enter after the "+" symbol.
+```
+
+Note: the book now asks to set up the preliminary/set up code at this point, but I have already done so (even though I did it in a different way.) Therefore, I will skip straight to the next section.
+
+"4.2.2 Interpretation, Then Customize"
+
+There is a clear positive relationship and two groups (Grazed & Ungrazed.) How can we illustrate this better with our plots?
+
+"4.2.3 That Gray Background"
+
+Adding themes (to get rid of the gray background) should be placed at the end of the code chunk for ggplot:
+
+```{r}
+ggplot(compensation,aes(x = Root, y = Fruit)) + 
+  geom_point() +
+  theme_bw() # a theme selected from the set inside of ggplot2 -- now we have a white background
+```
+
+Increasing the size of the points:
+
+Note: geom_point() adds points to the graph; adding a size = argument allows the size of those points to be changed
+
+```{r}
+ggplot(compensation,aes(x = Root, y = Fruit)) + 
+  geom_point(size = 5) + # add a size agrument to change the size
+  theme_bw()
+```
+
+Changing the x and y labels:
+
+Use xlab() and ylab()
+
+```{r}
+ggplot(compensation,aes(x = Root, y = Fruit)) + 
+  geom_point(size = 5) +
+  xlab("Root Biomass") +
+  ylab("Fruit Production") +
+  theme_bw()
+```
+
+Adjusting colors of the points for different categories within a variable:
+
+```{r}
+ggplot(compensation,aes(x = Root, y = Fruit,color = Grazing)) + 
+  geom_point(size = 5) +
+  xlab("Root Biomass") +
+  ylab("Fruit Production") +
+  theme_bw()
+```
+
+And/or change the shape of the points to distinguish the groups:
+
+```{r}
+ggplot(compensation,aes(x = Root, y = Fruit, shape = Grazing)) + 
+  geom_point(size = 5) +
+  xlab("Root Biomass") +
+  ylab("Fruit Production") +
+  theme_bw()
+```
+
+
+## "4.3 Box-and-whisker plots"
+
+Bar graphs often hide a lot of information: a better alternative is the box and whisker plot
+
+Response var: Fruit
+Predictor: Grazing treatments
+
+built in box plot function: geom_boxplot()
+
+```{r}
+ggplot(compensation,aes(x = Grazing, y = Fruit)) + # ggplot knows what to do with categorical variables
+  geom_boxplot() +
+  xlab("Grazing Treatment") +
+  ylab("Fruit Production") +
+  theme_bw()
+```
+
+We can also add the raw data ontop of this box plot:
+
+```{r}
+ggplot(compensation,aes(x = Grazing, y = Fruit)) + 
+  geom_boxplot() +
+  geom_point(size = 4, color = "lightgray", alpha = 0.5) + # the alpha argument controls the transparency of all the points
+  xlab("Grazing Treatment") +
+  ylab("Fruit Production") +
+  theme_bw()
+```
+
+
+## "Distributions: making histograms of numeric variables
+
+Note: for histograms, the computer creates the y - axis as it is only count data generated based on the intervals chosen for each bar. Therefore aes() will only have one variable 'x.'
+
+```{r}
+ggplot(compensation, aes(x = Fruit)) +
+  geom_histogram()
+```
+
+Check console: We need to change the binwidth to make this plot look better. By default, the computer picked 30 bars.
+
+Note: we can either the bin width (the size of the interval for each bar) or change the number of intervals:
+
+```{r}
+ggplot(compensation, aes(x = Fruit)) +
+  geom_histogram(bins = 10) # changes number of bars
+ggplot(compensation, aes(x = Fruit)) +
+  geom_histogram(binwidth = 15) # changes the width of the intervals
+```
+
+"4.4.1 A Nifty Tool: Facets"
+
+Faceting or latticing is the production of a matrix of graphs structured by a categorical variable.
+
+Use facet_wrap to this end.
+
+```{r}
+ggplot(compensation, aes(x = Fruit)) +
+  geom_histogram(binwidth = 15) +
+  facet_wrap(~Grazing) # makes two smaller histograms based on the groups in Grazing.
+```
+
+Note: ~ precedes the grouping variable.
+
+
+## "4.5 Saving your graphs for presentation, documents, etc."
+
+Two ways to save graphs:
+
+1) Using the plots tab and export -- have to change the default inline output to plots pane
+2) using ggsave() -- saves current figure in the plots window to working directory
+
+2)
+```{r}
+ggsave("ThatCoolHistogramOfFruit.png")
+```
+
+
+
