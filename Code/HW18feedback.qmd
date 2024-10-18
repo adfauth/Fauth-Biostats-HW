@@ -1,0 +1,9 @@
+---
+title: "hw 18 feedback"
+format: html
+editor: visual
+---
+
+## Homework 18 feedback
+
+NICE! I really appreciate how well you added commentary about the WHAT/WHY of your code outside of the code chunks and the HOW of your code inside of code chunks. Keep it up!
