@@ -4,6 +4,7 @@ author: "Aidan Fauth"
 format: html
 editor: visual
 ---
+
 ## Set up
 
 ```{r}
@@ -26,14 +27,13 @@ compensation$Grazing <- as.factor(compensation$Grazing)
 levels(compensation$Grazing) # make sure the levels are correct (it should be good bc the last time there were no errors)
 ```
 
-
 ## "4.2 ggplot2: a grammar for graphics"
 
 Basic syntax of ggplot2:
 
 aes() defines the aesthetics of the graph -- what the variables are (what the response and predictor are)
 
-+ symbol is how extra "layers" are added to the graph like geom_point() adds points
+-   symbol is how extra "layers" are added to the graph like geom_point() adds points
 
 ```{r}
 ggplot(compensation,aes(x = Root, y = Fruit)) + 
@@ -98,13 +98,11 @@ ggplot(compensation,aes(x = Root, y = Fruit, shape = Grazing)) +
   theme_bw()
 ```
 
-
 ## "4.3 Box-and-whisker plots"
 
 Bar graphs often hide a lot of information: a better alternative is the box and whisker plot
 
-Response var: Fruit
-Predictor: Grazing treatments
+Response var: Fruit Predictor: Grazing treatments
 
 built in box plot function: geom_boxplot()
 
@@ -126,7 +124,6 @@ ggplot(compensation,aes(x = Grazing, y = Fruit)) +
   ylab("Fruit Production") +
   theme_bw()
 ```
-
 
 ## "Distributions: making histograms of numeric variables
 
@@ -160,20 +157,18 @@ ggplot(compensation, aes(x = Fruit)) +
   facet_wrap(~Grazing) # makes two smaller histograms based on the groups in Grazing.
 ```
 
-Note: ~ precedes the grouping variable.
-
+Note: \~ precedes the grouping variable.
 
 ## "4.5 Saving your graphs for presentation, documents, etc."
 
 Two ways to save graphs:
 
-1) Using the plots tab and export -- have to change the default inline output to plots pane
-2) using ggsave() -- saves current figure in the plots window to working directory
+1)  Using the plots tab and export -- have to change the default inline output to plots pane
 
-2)
+2)  using ggsave() -- saves current figure in the plots window to working directory
+
+3)  
+
 ```{r}
 ggsave("ThatCoolHistogramOfFruit.png")
 ```
-
-
-
