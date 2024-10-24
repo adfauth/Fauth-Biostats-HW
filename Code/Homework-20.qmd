@@ -53,7 +53,7 @@ ggplot(SOM, aes(Forest, mean_SOM))+
   xlab("Forest name")
 ```
 
-Based on what you see in the bar chart, how would you describe the pattern of SOM between the 4 different forests? Write your answer here: 
+Based on what you see in the bar chart, how would you describe the pattern of SOM between the 4 different forests? Write your answer here:
 
 It shows that the Kip Tract has the highest mean percent soil organic matter followed by Donnerville, South Hammond, and Degrasse. With these data, the larger means also have a larger error bar (these forests have a larger standard deviation/spread of SOM percentages.) It's hard to see if the error bars overlap because only the positive part of the error bar is shown, but it is likely a good amount of the error bars overlap, meaning that the means are within one standard deviation of each other (in numerical order.)
 
@@ -70,12 +70,21 @@ ggplot(soil, aes(x = Forest, y = SOM_percent))+
 
 Based on what you see in the box plot, write out your answers the following questions:
 
--   how would you describe the pattern of SOM between the 4 different forests?
-The kip tract has larger median SOM among the other forests and the other three have very similar medians, but Donnerville has a clear outlier. The other three forests have very narrow spread compared to the Kip Tract which had a large spread and is skewed right.
+-   how would you describe the pattern of SOM between the 4 different forests? The kip tract has larger median SOM among the other forests and the other three have very similar medians, but Donnerville has a clear outlier. The other three forests have very narrow spread compared to the Kip Tract which had a large spread and is skewed right.
 
--   What do you notice that is different from how the data were displayed in the bar plot?
-The Donnerville center (this time the average) seems much larger in comparison and the spread is much larger as well. The bar graph makes the Donnerville data seem more similar to the Kip Tract distribution than the box plots do.
+-   What do you notice that is different from how the data were displayed in the bar plot? The Donnerville center (this time the average) seems much larger in comparison and the spread is much larger as well. The bar graph makes the Donnerville data seem more similar to the Kip Tract distribution than the box plots do.
 
 -   Which plot type is more informative? Explain your answer.
 
-The box plots because they show the center, shape, and spread of the data and the median is also not effected by skew. The bar graph only shows the center and the spread, and the mean is effected by skew and especially the extreme outliers in the Donnerville data.  
+The box plots because they show the center, shape, and spread of the data and the median is also not effected by skew. The bar graph only shows the center and the spread, and the mean is effected by skew and especially the extreme outliers in the Donnerville data.
+
+Look at na.rm = T
+
+```{r}
+soil |> summarise(mean_SOM = mean(SOM_percent), sd_SOM = sd(SOM_percent)) |> View()
+```
+
+```{r}
+soil |> summarise(mean_N = mean(Nitrate_N_ppm, na.rm = T), sd_SOM = sd(Nitrate_N_ppm, na.rm = T)) |> View()
+```
+
