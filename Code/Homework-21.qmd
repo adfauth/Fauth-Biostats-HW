@@ -1,0 +1,164 @@
+---
+title: "Homework 21"
+author: "Aidan Fauth"
+format: html
+editor: visual
+---
+
+## Introduction to statistics:
+
+This homework is covering the beginng of chapter 5 of GSWR book.
+
+## Set up
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library(here)
+```
+
+Import the data and take a look at the data:
+
+```{r}
+lady <- read.csv(here("Data", "ladybirds.csv"))
+head(lady)
+```
+
+Convert the char data to factored data:
+
+```{r}
+lady$Habitat <- as.factor(lady$Habitat)
+lady$Site <- as.factor(lady$Site)
+lady$colour <- as.factor(lady$colour)
+```
+
+Check to see if everything looks right:
+
+```{r}
+head(lady)
+```
+
+
+## $\chi^2$ Contingency Table Analysis
+
+Looking to see if there is an association between the two color morphs and two habitats.
+
+First, organize the data for plotting and analysis:
+
+```{r}
+totals <- lady |> 
+  group_by(Habitat, colour) |> 
+  summarise(total.number = sum(number))
+```
+
+Make a figure of these data using a bar chart:
+
+```{r}
+ggplot(totals, aes(x = Habitat, y = total.number, fill = colour))+
+  geom_bar(stat = "identity", position = "dodge")
+```
+
+This is the only situations a bar graph makes sense because there is no spread or shape to the data to examine -- it's just count data.
+
+Some new things to add to ggplot:
+
+fill = colour used for geometry like bars that have a fill color. Also, color = color would alter to the outline of the bars
+
+geom_bar() syntax:
+
+  stat = "identity" stops ggplot from calculating anything from the data it was given.
+  
+  position = "dodge" tells ggplot to put the habitat groups next to each other instead of having a stacked bar graph.
+  
+
+Change the colors on the bar graph to make more sense:
+
+```{r}
+ggplot(totals, aes(x = Habitat, y = total.number, fill = colour))+
+  geom_bar(stat = "identity", position = "dodge")+
+  scale_fill_manual(values = c(black = "black", red = "red")) # change the colors to represent the data
+```
+
+Interpreting the graphs
+
+Just from the graphs there does seem to be an association between the habitat type and the more prevalent color morph.
+
+We expect to reject the null hypothesis due to an uneven distribution of color morphs among the habitats.
+
+
+Making the $\chi^2$ test
+
+We need the data frame to be converted to a matrix.
+
+```{r}
+lady.mat <- xtabs(number ~ Habitat + colour, data = lady) 
+# xtabs cross tabulates to convert the df to a matrix using a simple formula
+```
+
+Now the test:
+
+```{r}
+chisq.test(lady.mat)
+```
+
+Reject the null. We have discernible evidence ($\chi^2 = 19.1, df = 1, p = 1.239 * 10^{-5}$) that the number of black and red color morphs are unevenly distributed among the two habitats.
+
+
+## Two-sample t-test
+
+The two sample t-test is a comparison of two means. The predictor is categorical and the response is quantitative.
+
+Assumptions:
+1. Data are normally distributed
+2. Equal variance
+
+Fist graph the data: show both distributions of each category
+
+Use two histograms:
+
+First load in the ozone data:
+
+```{r}
+ozone <- read.csv(here("Data", "ozone 2024-10-23 23_43_15.csv"))
+```
+
+```{r}
+head(ozone)
+```
+
+Convert char data to factors:
+
+```{r}
+ozone$Garden.location <- as.factor(ozone$Garden.location)
+ozone$Garden.ID <- as.factor(ozone$Garden.ID)
+```
+
+```{r}
+head(ozone)
+```
+Looks good.
+
+Step 1: plot the data
+
+Histograms:
+
+```{r}
+ggplot(ozone, aes(Ozone))+
+  geom_histogram(binwidth = 10)+
+  facet_wrap(~ Garden.location, ncol = 1)+ # ncol arranges them in column
+  theme_bw()
+```
+
+There is a good amount of overlap, but the means could be different. We need the test to be sure.
+
+Two-sample t-test:
+
+```{r}
+t.test(Ozone ~ Garden.location, data = ozone)
+```
+
+We reject the null due to the small p-value.
+
+Note: Welch t-test is due to the fact that the equal variance assumption was not met (slightly different t-test was used instead)
+
+
