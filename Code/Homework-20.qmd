@@ -87,4 +87,3 @@ soil |> summarise(mean_SOM = mean(SOM_percent), sd_SOM = sd(SOM_percent)) |> Vie
 ```{r}
 soil |> summarise(mean_N = mean(Nitrate_N_ppm, na.rm = T), sd_SOM = sd(Nitrate_N_ppm, na.rm = T)) |> View()
 ```
-
