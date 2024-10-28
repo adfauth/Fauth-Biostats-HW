@@ -42,6 +42,7 @@ Now you need to write some code to obtain the actual counts and save them in a n
 
 ```{r}
 covid_counts <- covid |> group_by(Vaccination_status, Survival) |> summarise(count = length(Patient_ID))
+# could also use n() with no arguements as well
 ```
 
 Now make a bar plot that shows the count data using the `covid_counts` dataframe you just created. Put survival on the x-axis and fill the bars based on vaccination status. Color vaccinated patients in dark green and unvaccinated patients in black. Remove the gray background.
