@@ -11,57 +11,60 @@ I am providing real data from a paper that examined the effectiveness of covid v
 Start by setting things up
 
 ```{r}
-
+rm(list = ls())
+library(tidyverse)
+library(here)
 ```
 
 Now read in the data file called `covid_vaccines.csv`. Make sure that this data file is located in the data folder of your Biostats-HW project! Assign the data to an object.
 
 ```{r}
-
+covid <- read.csv(here("Data", "covid_vaccines.csv"))
+head(covid)
 ```
 
 There are two variables in the data set that should be assigned as factor variables. Do that now.
 
 ```{r}
-
+covid$Vaccination_status <-  as.factor(covid$Vaccination_status)
+levels(covid$Vaccination_status)
+covid$Survival <- as.factor(covid$Survival) 
+levels(covid$Survival)
 ```
 
 ## Examine and plot the data
+
 Now view the data set. What do you notice about it? Are there any obvious count data already created? Explain:
 
-Write your answer here.
-
-
-
-
+There are only three variables. The patient ID #s are not a complete sequence of integers -- some numbers are skipped. There are no obvious count data. The patient IDs are sort of like count data, but because they are an incomplete sequence they aren't count data even though they are composed of integers and there is no single total of a particular group.
 
 Now you need to write some code to obtain the actual counts and save them in a new object called `covid_counts`. You will use the familiar `group_by` and `summarise`. However, you need to try a new trick to get counts when your dataset has no actual numbers in it. I'm going to suggest that within your `summarise` statement you create a new variable called `count`. And I'm going to ask you to see if you can figure out how to use a function called `length` to obtain count data. You may need to use the help in RStudio or google to figure out how to do this step.
 
 ```{r}
-
+covid_counts <- covid |> group_by(Vaccination_status, Survival) |> summarise(count = length(Patient_ID))
 ```
 
 Now make a bar plot that shows the count data using the `covid_counts` dataframe you just created. Put survival on the x-axis and fill the bars based on vaccination status. Color vaccinated patients in dark green and unvaccinated patients in black. Remove the gray background.
 
 ```{r}
-
+ggplot(covid_counts, aes(x = Survival, y = count, fill = Vaccination_status))+
+  geom_bar(stat = "identity", position = "dodge")+
+  scale_fill_manual(values = c("Fully vaccinated" = "darkgreen", "Not vaccinated" = "black")) # had to add quotes possibly because the factor levels had spaces in them.
 ```
 
 ## Conduct the Chi-square test
+
 Now use the information from Chapter 5 and Homework 21 to conduct a Chi-square test of association. Your "null hypothesis" is that there is no association between whether a patient has had a covid vaccine and their survival in the emergency room.
 
-
-
 ```{r}
-
+# first we need a matrix of the data instead of a data frame.
+covid.mat <- xtabs(count ~ Survival + Vaccination_status, data = covid_counts)
 ```
 
-
-
 ```{r}
-
+chisq.test(covid.mat)
 ```
 
 ## Interpret the results
-Now write a statement or two that interprets the results of your analysis.
 
+Reject the null hypothesis. We have statistically discernible evidence (p = 0.0001785) that there is an association between survival in the emergency room and a patient's vaccination status.
