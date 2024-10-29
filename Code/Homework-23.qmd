@@ -1,0 +1,91 @@
+---
+title: "Homework 23"
+format: html
+editor: visual
+---
+
+## Set up
+
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(here)
+```
+
+Load in the data and take a look:
+
+```{r}
+plant_gr <- read.csv(here("Data", "plant.growth.rate.csv"))
+glimpse(plant_gr)
+```
+
+This homework is for sections 5.4-5.5 of GSWR book. 
+
+
+## 5.4 "Introducing ... linear models"
+
+General linear models (NOT GLMs): regression, multiple regression, ANOVA, and ANCOVA (fundamentally linear models.)
+
+Estimation: least squares
+
+Assumptions: residuals are normally distributed
+
+Most important function: lm()
+
+
+## 5.5 "Simple linear regression"
+
+Question: do plant growth rates vary with soil moisture?
+
+Expectation: plants will grow faster with more moisture.
+
+Key rationale for using a lm in this case: Continuous response variable.
+
+5.5.1 Plotting:
+
+I already looked at the data but here it is again:
+
+```{r}
+head(plant_gr)
+```
+
+Scatterplot:
+
+```{r}
+ggplot(plant_gr, aes(x = soil.moisture.content, y = plant.growth.rate))+
+  geom_point()+
+  ylab("Plant Growth Rate (mm/week)")+
+  theme_bw()
+```
+
+5.5.2 Interpretation:
+
+Positive relationship shown: as moisture increases, plant gr increases. Can try to roughly guess the intercept and slope just from the graph. The book says the equation is roughly: $\widehat{Plant Growth Rate} = 15 * Soil Moisture + 17.5$.
+
+d.f. : # of points - # of parameters
+
+5.5.3 Using lm():
+
+```{r}
+model_pgr <- lm(plant.growth.rate~soil.moisture.content, data = plant_gr)
+```
+
+5.5.4 Assumptions:
+
+ggplot doesn't recognize lms so it needs ggfortify: autoplot() takes lms and plots them (includes plots that can be made from plot() in base R)
+
+Producing a plot:
+
+```{r}
+library(ggfortify) # package is installed and should now be added to my normal 'set up' section of code.
+autoplot(model_pgr, smooth.color = NA)
+```
+
+What do the plots mean?
+
+Top Left: about the 'systematic part' of the model. Any curvature to the data means the structure of the model is wrong.
+
+Top right: Evaluates the assumption of normal residuals. Especially useful with small sample sizes. Want to see the points as close to the normal quantile line as possible.
+
+Bottom left: Evaluates equal variance assumption.
+
