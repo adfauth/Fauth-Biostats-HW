@@ -78,7 +78,7 @@ Producing a plot:
 
 ```{r}
 library(ggfortify) # package is installed and should now be added to my normal 'set up' section of code.
-autoplot(model_pgr, smooth.color = NA)
+autoplot(model_pgr, smooth.colour = NA)
 ```
 
 What do the plots mean?
@@ -87,5 +87,48 @@ Top Left: about the 'systematic part' of the model. Any curvature to the data me
 
 Top right: Evaluates the assumption of normal residuals. Especially useful with small sample sizes. Want to see the points as close to the normal quantile line as possible.
 
-Bottom left: Evaluates equal variance assumption.
+Bottom left: Evaluates equal variance assumption. Y-axis: is a standardized indicator of variation. The points should be random/no pattern.
+
+Bottom right: Evaluates each points leverage: used to identify outliers and points that have high influence on slope of the model.
+
+smooth.colour = NA omits a "wiggly line" that is distracting.
+
+5.5.5 Interpretation:
+
+Tools to use: anova() and summary()
+
+anova() does not compute the type of ANOVA that compares means, instead it produces the sums of squares table as well as the F-value, $R^2$ and adjusted $R^2$.
+
+anova table:
+
+```{r}
+anova(model_pgr)
+```
+
+We see a very small p-value (significance)
+
+```{r}
+summary(model_pgr)
+```
+
+Again a significant p-value both from t-test for individual coefficients and the overall F stat.
+
+5.5.6 Back to the plot:
+
+Bring back the model to plot of the raw data:
+
+adding regression lines in ggplot:
+
+```{r}
+ggplot(plant_gr,aes(x = soil.moisture.content, y = plant.growth.rate))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  ylab("Plant Growth Rate (mm/week)")+
+  theme_bw()
+```
+
+New feature: `geom_smooth(method = "lm")` -> plots a linear regression line with the standard error of the fit in transparent gray.
+
+This doesn't work with more complicated models.
+
 
