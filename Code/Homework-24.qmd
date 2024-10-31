@@ -1,0 +1,41 @@
+---
+title: "Homework 24"
+format: html
+editor: visual
+---
+
+## Overview
+
+For your homework you will implement a data analysis using a dataset on crab growth measurements.
+
+Set things up (hint: there is a new package to add with `library()`)
+
+```{r}
+
+```
+
+## The data
+
+Let's pull in some data appropriate biologists: crab measurements. This dataset includes measurements of farmed crabs.
+
+```{r}
+crabs <- 
+glimpse(crabs)
+```
+
+One of the variables is categorical - let's fix that in the data.
+
+```{r}
+
+```
+
+## Question
+
+Is there a relationship between height and weight in female crabs?
+
+1.  Extract the data for just female crabs.
+2.  Examine the response and predictor variables and use the flow chart from class to decide the appropriate statistical analysis (choose from: chi-square, 2-sample t-test or linear regression). Explain your answer here:
+
+3.  Work through the data analysis **following all of the steps provided in chapter 5 of your book**. You may use class notes or homework keys as a guide.
+
+## 
