@@ -61,7 +61,7 @@ ggplot(fcrabs, aes(x = Weight, y = Height ))+
   geom_point(color = "blue")
 ```
 
-There is a clear (slightly) positive relationship between weight and height of female crabs. Height ranges from around .2 to .6 and weight ranges from 1 to 75, so the predicted slope is around .4/74 = 0.005. There appears to be an extreme outline at around weight 18.
+There is a clear (slightly) positive relationship between weight and height of female crabs. Height ranges from around .2 to .6 and weight ranges from 1 to 75, so the predicted slope is around .4/74 = 0.005. There appears to be an extreme outlier at around weight 18.
 
 Check assumptions:
 
