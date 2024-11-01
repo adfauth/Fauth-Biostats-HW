@@ -38,7 +38,6 @@ Check to see if everything looks right:
 head(lady)
 ```
 
-
 ## $\chi^2$ Contingency Table Analysis
 
 Looking to see if there is an association between the two color morphs and two habitats.
@@ -66,10 +65,9 @@ fill = colour used for geometry like bars that have a fill color. Also, color = 
 
 geom_bar() syntax:
 
-  stat = "identity" stops ggplot from calculating anything from the data it was given.
-  
-  position = "dodge" tells ggplot to put the habitat groups next to each other instead of having a stacked bar graph.
-  
+stat = "identity" stops ggplot from calculating anything from the data it was given.
+
+position = "dodge" tells ggplot to put the habitat groups next to each other instead of having a stacked bar graph.
 
 Change the colors on the bar graph to make more sense:
 
@@ -84,7 +82,6 @@ Interpreting the graphs
 Just from the graphs there does seem to be an association between the habitat type and the more prevalent color morph.
 
 We expect to reject the null hypothesis due to an uneven distribution of color morphs among the habitats.
-
 
 Making the $\chi^2$ test
 
@@ -103,14 +100,11 @@ chisq.test(lady.mat)
 
 Reject the null. We have discernible evidence ($\chi^2 = 19.1, df = 1, p = 1.239 * 10^{-5}$) that the number of black and red color morphs are unevenly distributed among the two habitats.
 
-
 ## Two-sample t-test
 
 The two sample t-test is a comparison of two means. The predictor is categorical and the response is quantitative.
 
-Assumptions:
-1. Data are normally distributed
-2. Equal variance
+Assumptions: 1. Data are normally distributed 2. Equal variance
 
 Fist graph the data: show both distributions of each category
 
@@ -136,6 +130,7 @@ ozone$Garden.ID <- as.factor(ozone$Garden.ID)
 ```{r}
 head(ozone)
 ```
+
 Looks good.
 
 Step 1: plot the data
@@ -160,5 +155,3 @@ t.test(Ozone ~ Garden.location, data = ozone)
 We reject the null due to the small p-value.
 
 Note: Welch t-test is due to the fact that the equal variance assumption was not met (slightly different t-test was used instead)
-
-

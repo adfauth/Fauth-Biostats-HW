@@ -11,7 +11,10 @@ For your homework you will implement a data analysis using a dataset on crab gro
 Set things up (hint: there is a new package to add with `library()`)
 
 ```{r}
-
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(ggfortify) # new package!
 ```
 
 ## The data
@@ -19,14 +22,15 @@ Set things up (hint: there is a new package to add with `library()`)
 Let's pull in some data appropriate biologists: crab measurements. This dataset includes measurements of farmed crabs.
 
 ```{r}
-crabs <- 
+crabs <- read.csv(here("Data", "CrabAgePrediction.csv"))
 glimpse(crabs)
 ```
 
 One of the variables is categorical - let's fix that in the data.
 
 ```{r}
-
+crabs$Sex <- as.factor(crabs$Sex)
+levels(crabs$Sex)
 ```
 
 ## Question
@@ -34,8 +38,87 @@ One of the variables is categorical - let's fix that in the data.
 Is there a relationship between height and weight in female crabs?
 
 1.  Extract the data for just female crabs.
+
+Use filter and save it as a new data frame:
+
+```{r}
+fcrabs <-  crabs |> filter(Sex == "F")
+```
+
+
 2.  Examine the response and predictor variables and use the flow chart from class to decide the appropriate statistical analysis (choose from: chi-square, 2-sample t-test or linear regression). Explain your answer here:
+
+Height and weight are both continuous ratio data, so the appropriate test is linear regression. The others require categorical predictors, so they would not be appropriate for these data.
+
+
 
 3.  Work through the data analysis **following all of the steps provided in chapter 5 of your book**. You may use class notes or homework keys as a guide.
 
-## 
+First plot the data (scatter plot of height as the response and weight as the predictor):
+
+```{r}
+ggplot(fcrabs, aes(x = Weight, y = Height ))+
+  geom_point(color = "blue")
+```
+
+There is a clear (slightly) positive relationship between weight and height of female crabs. Height ranges from around .2 to .6 and weight ranges from 1 to 75, so the predicted slope is around .4/74 = 0.005. There appears to be an extreme outline at around weight 18.
+
+Check assumptions:
+
+First fit the model:
+
+```{r}
+modhw <- lm(Height ~ Weight, data = fcrabs)
+```
+
+
+```{r}
+autoplot(modhw, smooth.colour = NA)
+```
+
+All the assumptions look good except for the fact that there is an extreme outlier 701. This should most likely be removed as it is such an extreme value. Residuals vs. fits: the data clearly follow a linear trend. Normal quantile plot: the points closely follow a theoretical normal distribution (excluding the outlier.) The scale-location shows a random assortments (equal variance condition) excluding the outlier. The outlier is not super high leverage, but it has a such a large residual that it should be excluded.
+
+```{r}
+fcrabsedit <- fcrabs |> filter(Height <= 2) # removes the one problematic data point.
+```
+
+Plot to show this:
+
+```{r}
+ggplot(fcrabsedit, aes(Weight,Height))+
+  geom_point(color="red")
+```
+
+Re-fit the model and see the 'autoplots'
+
+```{r}
+modhwe <- lm(Height~Weight, data = fcrabsedit)
+autoplot(modhwe, smooth.colour = NA)
+```
+
+1108 is another possible outlier, but it is at least more of a plausible point.
+
+Look at `summary()` of the model to look for significant slope:
+
+```{r}
+summary(modhwe)
+```
+
+Clearly we reject the null hypothesis. We have strong statistically discernible evidence that the slope is greater than zero and therefore evidence for a positive relationship between weight and height of female crabs (t = 50.01, d.f. = 1122, p < 0.001).
+
+Plot with regression line:
+
+```{r}
+ggplot(fcrabsedit, aes(Weight, Height))+
+  geom_point(color = "blue")+
+  geom_smooth(method = "lm")
+```
+
+
+
+
+
+
+
+
+

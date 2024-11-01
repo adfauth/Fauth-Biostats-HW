@@ -19,8 +19,7 @@ plant_gr <- read.csv(here("Data", "plant.growth.rate.csv"))
 glimpse(plant_gr)
 ```
 
-This homework is for sections 5.4-5.5 of GSWR book. 
-
+This homework is for sections 5.4-5.5 of GSWR book.
 
 ## 5.4 "Introducing ... linear models"
 
@@ -31,7 +30,6 @@ Estimation: least squares
 Assumptions: residuals are normally distributed
 
 Most important function: lm()
-
 
 ## 5.5 "Simple linear regression"
 
@@ -62,7 +60,7 @@ ggplot(plant_gr, aes(x = soil.moisture.content, y = plant.growth.rate))+
 
 Positive relationship shown: as moisture increases, plant gr increases. Can try to roughly guess the intercept and slope just from the graph. The book says the equation is roughly: $\widehat{Plant Growth Rate} = 15 * Soil Moisture + 17.5$.
 
-d.f. : # of points - # of parameters
+d.f. : \# of points - \# of parameters
 
 5.5.3 Using lm():
 
@@ -127,8 +125,6 @@ ggplot(plant_gr,aes(x = soil.moisture.content, y = plant.growth.rate))+
   theme_bw()
 ```
 
-New feature: `geom_smooth(method = "lm")` -> plots a linear regression line with the standard error of the fit in transparent gray.
+New feature: `geom_smooth(method = "lm")` -\> plots a linear regression line with the standard error of the fit in transparent gray.
 
 This doesn't work with more complicated models.
-
-
