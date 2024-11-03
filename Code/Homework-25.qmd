@@ -1,0 +1,129 @@
+---
+title: "Homework 25"
+author: "Aidan Fauth"
+format: html
+editor: visual
+---
+
+This homework covers the code from sections 5.6 to 5.7 in the GSWR book (pg 118-129).
+
+## Set up
+
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(ggfortify)
+```
+
+## 5.6 "Analysis fo variance: the one-way ANOVA"
+
+Final test: One way ANOVA -- uses a factor/categorical explanatory variable and a continuous response variable.
+
+Question with two parts: 1) Is there a relationship between the predictor and response? 2) How do the groups compare to each other?
+
+Load in the data set:
+
+```{r}
+daphnia <- read.csv(here("Data", "Daphniagrowth.csv"))
+glimpse(daphnia)
+```
+
+Need to make parasite into a factor:
+
+```{r}
+daphnia$parasite <- as.factor(daphnia$parasite)
+```
+
+Plot the data:
+
+```{r}
+ggplot(daphnia, aes(x=parasite, y = growth.rate))+
+  geom_boxplot()+
+  theme_bw()+
+  coord_flip() # if the names are mashed together
+```
+
+Interpretation:
+
+There is clear differences between the groups.
+
+The control has the highest median growth rate of about 1.2 mm/day.
+
+There is an ordering to the other group: P. perplexa, M, bicuspidata, and P. ramosa from highest to lowest median growth rate
+
+
+5.6.2 "Construct the ANOVA"
+
+Use lm()
+
+```{r}
+model_grow <- lm(growth.rate ~ parasite, data = daphnia)
+```
+
+
+5.6.3 "Check Assumptions"
+
+```{r}
+autoplot(model_grow, smooth.colour = NA)
+```
+
+
+The normal quantile plot is potentially concerning, but we can still accept that the assumptions are met.
+
+
+5.6.4 "Making an Inference from a One-Way ANOVA"
+
+Use anova()
+
+```{r}
+anova(model_grow)
+```
+
+Output looks the same as regression because the are both linear models.
+
+Null hypothesis: there is no difference in group means.
+
+F-value: ratio of "between group variance" and "within-group" variance. Large F-value means a small p-value.
+
+
+5.6.5 "Treatment Contrasts"
+
+Look at summary table:
+
+```{r}
+summary(model_grow)
+```
+
+What is missing? treatment group called control -- its not missing its just labelled intercept.
+
+R presents them in alphabetical order with the first group being the intercept.
+
+Treatment contrasts illustrate differences between the "reference level" and the other groups.
+
+In this example: the differences between the parasite groups and the control.
+
+Means for the groups can also be found using `group_by()` and `summarise()`:
+
+```{r}
+sumDat <- daphnia |> 
+  group_by(parasite) |> 
+  summarise(meanGR = mean(growth.rate))
+sumDat
+```
+
+Coefficients are the control + treatment contrast (in `summary()`) = group mean
+
+When the control is the intercept, the p-values are useful, but be wary of "multiple testing problem"
+
+Plot:
+
+```{r}
+ggplot(daphnia,aes(parasite, growth.rate, colour = parasite))+
+  geom_point(size = 3, alpha = .5)+
+  geom_point(data = sumDat, aes(parasite, meanGR), shape = "diamond", size = 7 )+
+  theme_bw()+
+  coord_flip()
+```
+
+
