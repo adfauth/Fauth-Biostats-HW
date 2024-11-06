@@ -28,7 +28,7 @@ pea$Treatment <- as.factor(pea$Treatment)
 levels(pea$Treatment)
 ```
 
-Need to re-level the variable so the control is the 'first' level.
+Need to re-level the variable so the control is the 'first' level (looked ahead in chapt 6.)
 
 ```{r}
 # use mutate() and relevel()
