@@ -52,7 +52,6 @@ The control has the highest median growth rate of about 1.2 mm/day.
 
 There is an ordering to the other group: P. perplexa, M, bicuspidata, and P. ramosa from highest to lowest median growth rate
 
-
 5.6.2 "Construct the ANOVA"
 
 Use lm()
@@ -61,16 +60,13 @@ Use lm()
 model_grow <- lm(growth.rate ~ parasite, data = daphnia)
 ```
 
-
 5.6.3 "Check Assumptions"
 
 ```{r}
 autoplot(model_grow, smooth.colour = NA)
 ```
 
-
 The normal quantile plot is potentially concerning, but we can still accept that the assumptions are met.
-
 
 5.6.4 "Making an Inference from a One-Way ANOVA"
 
@@ -85,7 +81,6 @@ Output looks the same as regression because the are both linear models.
 Null hypothesis: there is no difference in group means.
 
 F-value: ratio of "between group variance" and "within-group" variance. Large F-value means a small p-value.
-
 
 5.6.5 "Treatment Contrasts"
 
@@ -125,5 +120,3 @@ ggplot(daphnia,aes(parasite, growth.rate, colour = parasite))+
   theme_bw()+
   coord_flip()
 ```
-
-
