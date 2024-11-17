@@ -36,7 +36,6 @@ pea <- mutate(pea, Treatment = relevel(Treatment, ref = "Control"))
 levels(pea$Treatment) # check if it works
 ```
 
-
 Follow the plot, build model, test assumptions, interpret model method
 
 ## Plot:
@@ -53,7 +52,6 @@ ggplot(pea, aes(Treatment, pea_section_length_ou))+
 
 There does seem to be at least a difference between the experimental groups and the control, where the control group has a larger pea section length. The median for the control is about 68 and the closest experimental group (2 percent sucrose) has a median of about 64, the others are between 57.5 and 60. The spread of the data is much larger with the control versus the experimental groups. The control has an IQR of about 6 versus IQRs around 2.5 or lower with the experimental groups.
 
-
 ## Fit the model and check assumptions
 
 ```{r}
@@ -63,12 +61,12 @@ autoplot(modp, smooth.colour = NA)
 
 The plots look reasonable, meaning the assumptions have been met.
 
-
 ## Interpret Model
 
 ```{r}
 summary(modp)
 ```
+
 All the coefficients are significant, which means we have evidence that the control pea section length is discernibly longer than all the of the treatment groups.
 
 Plot:
@@ -80,7 +78,6 @@ sump <- pea |> group_by(Treatment) |>
   summarise(meanp = mean(pea_section_length_ou))
 ```
 
-
 ```{r}
 ggplot(pea,aes(Treatment, pea_section_length_ou, colour = Treatment))+
   geom_point(size = 3, alpha = .5)+
@@ -88,8 +85,6 @@ ggplot(pea,aes(Treatment, pea_section_length_ou, colour = Treatment))+
   theme_bw()+
   coord_flip()
 ```
-
-
 
 ## Tukey HSD test
 
@@ -99,13 +94,5 @@ First, we need to fit an aov model, then use Tukey HSD Test
 aovp <- aov(pea_section_length_ou ~ Treatment, data = pea)
 TukeyHSD(aovp)
 ```
-We find that the control is significantly larger than all the other groups (as seen with the ANOVA.) Out of the experimental groups, the 1 percent fructose 1 percent glucose is only discernibly smaller than the 2 percent sucrose group, and is not distinguishable from either the 2 percent fructose or 2 percent glucose. Additionally, the 2 percent glucose group is smaller than the 2 percent glucose, but not distinguishable from the 2 percent glucose. The 2 percent sucrose is discernibly larger than the 2 percent glucose as well. 
 
-
-
-
-
-
-
-
-
+We find that the control is significantly larger than all the other groups (as seen with the ANOVA.) Out of the experimental groups, the 1 percent fructose 1 percent glucose is only discernibly smaller than the 2 percent sucrose group, and is not distinguishable from either the 2 percent fructose or 2 percent glucose. Additionally, the 2 percent glucose group is smaller than the 2 percent glucose, but not distinguishable from the 2 percent glucose. The 2 percent sucrose is discernibly larger than the 2 percent glucose as well.
