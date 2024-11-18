@@ -244,7 +244,7 @@ There are no groups, so growth rate can vary freely. 34 because there are two pa
 summary(modgda)
 ```
 
-The overall regression is significant due to a large F value. The slope is also significantly greater than zero (t-test for slope.)
+The overall regression is significant due to a large F value. The slope is also significantly greater than zero (t-test for slope.) $R^2$ is only 0.2188, so that's a relatively weak relationship.
 
 ### Second attempt: Limited data set with only complete cases (use `df_No_NA`)
 
