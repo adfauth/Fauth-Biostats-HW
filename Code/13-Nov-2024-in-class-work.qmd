@@ -205,8 +205,6 @@ We will do our analysis TWICE, once with all of the data (no NA's removed) and a
 
 ### First attempt: All the data
 
-
-
 #### Plot and Guess
 
 ```{r}
@@ -249,7 +247,7 @@ Why are there 46 DF for the Residuals?
 
 How would you write a results statement?
 
-We have evidence of a discernible effect of treatment on 
+We have evidence of a discernible effect of treatment on
 
 ```{r}
 
