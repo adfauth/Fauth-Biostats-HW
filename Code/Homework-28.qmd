@@ -1,0 +1,193 @@
+---
+title: "HW 28"
+author: "Aidan Fauth"
+format: html
+editor: visual
+---
+
+This document goes through chapt 8 of GSWR book
+
+## Set up
+
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(ggfortify) # probably don't need but put this here out of habit
+library(gridExtra) # New package!
+```
+
+## Load in data
+
+```{r}
+compensation <- read.csv(here("Data", "compensation.csv"))
+```
+
+## 8.2 Prep
+
+Graphs (save them for future)
+
+```{r}
+# base scatterplot:
+eg_scatter <- ggplot(compensation, aes(Root, Fruit))+
+  geom_point()
+
+# Base box and whisker plot
+eg_box <- ggplot(compensation, aes(Grazing, Fruit))+
+  geom_boxplot()
+```
+
+Using the saved figure and adding to it:
+
+```{r}
+eg_scatter + theme_bw()
+```
+
+gridExtra: for plotting more than one ggplot figure on the same page
+
+```{r}
+grid.arrange(eg_scatter, eg_box, nrow=1)
+```
+
+arrangement is specified with nrow and/or ncol
+
+## 8.3 How to customize
+
+Two main routes:
+
+1)  `scale_()` of some kind -\> tied to x and y vars.
+
+2)  `theme()` of some kind -\> tied to what is outside the `aes()`
+
+Note: annotations have their own functions!
+
+## 8.4 Labels, Limits, Annotation
+
+axis titles: `xlab()` and `ylab()` or with parent fucntion `labs()`
+
+Using `xlab()` and `ylab()`:
+
+```{r}
+eg_scatter + xlab("Root Biomass") + ylab("Fruit Production")
+```
+
+If a title is really needed (but why would it?)
+
+```{r}
+eg_scatter + labs(title = "My SUPERB title")
+```
+
+Combine everything into `labs()`:
+
+```{r}
+eg_scatter + labs(title = "My useless title",
+                  x = "Root Biomass",
+                  y = "Fruit Production")
+```
+
+Range of x and y axes (not using `scale_()`)
+
+The simple functions are:
+
+```{r}
+eg_scatter + xlim(0,20) + ylim(0,140)
+```
+
+Custom text inside the figure:
+
+```{r}
+eg_scatter + annotate("text", x = c(6,8), y = c(105, 25),
+                      label = c("Text up here...", "...and text down here"))
+```
+
+## 8.5 Scales
+
+alterations to axis scales:
+
+```{r}
+eg_scatter + scale_x_continuous(limits = c(4,11), breaks = 4:11)
+```
+
+colors and fills: adding `color =` in `aes()` then using `scale_colour_manual()`
+
+```{r}
+ggplot(compensation, aes(Root, Fruit, colour = Grazing))+
+  geom_point() +
+  scale_color_manual(values = c(Grazed = "brown", Ungrazed = "green"))
+```
+
+axis transformations:
+
+log transformations:
+
+```{r}
+eg_box + scale_y_continuous(breaks = seq(from=10, to = 150, by = 20),
+                            trans = "log10")
+```
+
+## 8.6 Theme
+
+Used for non-aesthetic pieces of the graph (essentially cosmetic)
+
+For more crazy themes look at help file for `ggtheme()`
+
+```{r}
+eg_scatter + theme(
+  panel.background = element_rect(fill = NA, color = "black"),
+  panel.grid.minor = element_blank(),
+  panel.grid.major = element_line(colour = "lightblue")
+)
+```
+
+Review these customizations:
+
+-   the panel group have logical names about features of the figure
+
+-   `element_()` specifies arguments for panel group geometric components like rect for rectangle or line for lines
+
+-   `element_()` can be customized with arguments such as fill and color
+
+-   `element_blank()` shuts down the rendering of features
+
+Text and tick mark formatting:
+
+```{r}
+eg_box +
+  theme(
+    axis.title.x = element_text(colour = "cornflowerblue", size = rel(2)),
+    axis.text.x = element_text(angle = 45, size = 13, vjust = 0.5)
+  )
+```
+
+Notes:
+
+`size =` can take an absolute size or a size relative to the default (`rel()`)
+
+`vjust =` vertically adjust the labels (takes numbers btw 0 and 1)
+
+Discrete-axis customizations:
+
+```{r}
+eg_box + scale_x_discrete(limits = c("Ungrazed", "Grazed"),
+                          labels = c("Control", "Grazed"))
+```
+
+Customizing Legends/Keys
+
+```{r}
+ggplot(compensation, aes(Root, Fruit, colour = Grazing)) +
+  geom_point()+
+  theme(legend.key = element_rect(fill = NA))
+```
+
+To get rid of the legend we can either use `element_blank()` or `legend.position()`
+
+```{r}
+ggplot(compensation, aes(Root, Fruit, color = Grazing)) +
+  geom_point() +
+  theme(legend.position = "none")
+```
+
+
+
+

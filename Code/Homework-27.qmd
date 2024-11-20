@@ -87,7 +87,7 @@ anova(grow.mod)
 
 Practice your interpretation.
 
-Reject the null hypothesis. We have evidence that the fertilizer treatment has a discernible effect on plant growth rate. 
+Reject the null hypothesis. We have evidence that the fertilizer treatment has a discernible effect on plant growth rate.
 
 Why are there 2 DF for the Treatment effect?
 
@@ -109,7 +109,7 @@ summary(grow.mod)
 
 Practice your interpretation:
 
-We have evidence that one dose of fertilizer treatment has no discernible effect on plant growth rate, while there is a signifacnt increase in growth rate with 2 doses of fertilizer. 
+We have evidence that one dose of fertilizer treatment has no discernible effect on plant growth rate, while there is a signifacnt increase in growth rate with 2 doses of fertilizer.
 
 Does adding 1 dose of fertilizer change the growth rate significantly from the Control?
 
@@ -166,7 +166,7 @@ Fail to reject the null hypothesis. We do not have evidence of a significant eff
 
 Why are there 2 DF for the Treatment effect?
 
-Three treatment levels, so df = # of groups - 1.
+Three treatment levels, so df = \# of groups - 1.
 
 Why are there 33 DF for the Residuals?
 
@@ -287,7 +287,7 @@ Answer the following questions:
 
 1.  How many degrees of freedom are there for Growth_rate_mm? Why?
 
-One because there are no treatment levels. 
+One because there are no treatment levels.
 
 2.  How many degrees of freedom are there for Residuals? Why?
 
